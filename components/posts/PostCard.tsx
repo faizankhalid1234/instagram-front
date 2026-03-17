@@ -107,7 +107,7 @@ export default function PostCard({ post, currentUserId }: PostCardProps) {
               {post.user.avatar ? (
                 <Image
                   src={post.user.avatar}
-                  alt={post.user.username}
+                  alt={post.user.username || 'User avatar'}
                   width={36}
                   height={36}
                   className="rounded-full"
