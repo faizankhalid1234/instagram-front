@@ -43,6 +43,34 @@ interface DemoPost {
   inputComment: string;
 }
 
+const IT_GALLERY_IMAGES = [
+  'https://images.weserv.nl/?url=images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format%26fit=crop%26w=1200%26q=80&output=png',
+  'https://images.weserv.nl/?url=images.unsplash.com/photo-1518773553398-650c184e0bb3?auto=format%26fit=crop%26w=1200%26q=80&output=png',
+  'https://images.weserv.nl/?url=images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format%26fit=crop%26w=1200%26q=80&output=png',
+  'https://images.weserv.nl/?url=images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format%26fit=crop%26w=1200%26q=80&output=png',
+  'https://images.weserv.nl/?url=images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format%26fit=crop%26w=1200%26q=80&output=png',
+  'https://images.weserv.nl/?url=images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format%26fit=crop%26w=1200%26q=80&output=png',
+];
+
+const DEMO_CAPTIONS = [
+  'Shipping a new API module today. #backend #nodejs',
+  'Debugging session with clean architecture mindset. #devlife',
+  'Designing scalable systems for production workloads. #softwareengineering',
+];
+
+const buildDemoPosts = (seed: string): DemoPost[] => {
+  const shuffled = [...IT_GALLERY_IMAGES].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 3).map((image, index) => ({
+    id: `demo-${index}-${seed}`,
+    image,
+    caption: DEMO_CAPTIONS[index],
+    likes: 120 + index * 35,
+    liked: false,
+    comments: [],
+    inputComment: '',
+  }));
+};
+
 export default function HomePage() {
   const { user } = useAuthStore();
   const router = useRouter();
@@ -50,15 +78,6 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [isDemoVisitor, setIsDemoVisitor] = useState(false);
   const [demoPosts, setDemoPosts] = useState<DemoPost[]>([]);
-
-  const socialGallery = [
-    'https://images.weserv.nl/?url=images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format%26fit=crop%26w=1200%26q=80&output=png',
-    'https://images.weserv.nl/?url=images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format%26fit=crop%26w=1200%26q=80&output=png',
-    'https://images.weserv.nl/?url=images.unsplash.com/photo-1517841905240-472988babdf9?auto=format%26fit=crop%26w=1200%26q=80&output=png',
-    'https://images.weserv.nl/?url=images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format%26fit=crop%26w=1200%26q=80&output=png',
-    'https://images.weserv.nl/?url=images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format%26fit=crop%26w=1200%26q=80&output=png',
-    'https://images.weserv.nl/?url=images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format%26fit=crop%26w=1200%26q=80&output=png',
-  ];
 
   useEffect(() => {
     if (!user) {
@@ -76,23 +95,7 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!isDemoVisitor) return;
-
-    const shuffled = [...socialGallery].sort(() => Math.random() - 0.5);
-    setDemoPosts(
-      shuffled.slice(0, 3).map((image, index) => ({
-        id: `demo-${index}`,
-        image,
-        caption: [
-          'Weekend vibes with clean aesthetics ✨',
-          'Sunset moments and social feed energy 🌇',
-          'Building beautiful UI experiences daily 🚀',
-        ][index],
-        likes: 120 + index * 35,
-        liked: false,
-        comments: [],
-        inputComment: '',
-      }))
-    );
+    setDemoPosts(buildDemoPosts('initial'));
   }, [isDemoVisitor]);
 
   const handleDemoLike = (id: string) => {
@@ -157,7 +160,7 @@ export default function HomePage() {
           <div className="mb-6 overflow-hidden rounded-2xl border border-rose-100 bg-white p-4 shadow-sm">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-semibold text-slate-700">
-                Welcome Faizan - Demo Tour Ready
+                Welcome - Demo Tour Ready
               </h2>
               <button
                 onClick={() => setIsDemoVisitor(false)}
@@ -170,12 +173,12 @@ export default function HomePage() {
               <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
                 <div className="flex items-center gap-2">
                   <img
-                    src="https://api.dicebear.com/7.x/avataaars/png?seed=faizan-video"
-                    alt="Faizan avatar"
+                    src="https://api.dicebear.com/7.x/avataaars/png?seed=demo-video"
+                    alt="Demo avatar"
                     className="h-9 w-9 rounded-full border border-slate-200 bg-slate-100"
                   />
                   <div>
-                    <p className="text-sm font-semibold text-slate-700">faizan_demo</p>
+                    <p className="text-sm font-semibold text-slate-700">dev_demo</p>
                     <p className="text-[11px] text-slate-500">Featured Video Post</p>
                   </div>
                 </div>
@@ -187,8 +190,8 @@ export default function HomePage() {
               <div className="relative">
                 <iframe
                   className="h-64 w-full"
-                  src="https://www.youtube.com/embed/S5TYTFXka94?rel=0"
-                  title="Demo walkthrough video"
+                  src="https://www.youtube.com/embed/zOjov-2OZ0E?rel=0"
+                  title="Software engineering roadmap video"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
@@ -196,41 +199,26 @@ export default function HomePage() {
               </div>
               <div className="space-y-2 p-3">
                 <p className="text-sm text-slate-700">
-                  <span className="font-semibold">faizan_demo </span>
-                  Quick product walkthrough - clean UI, smooth login, and social feed demo.
+                  <span className="font-semibold">dev_demo </span>
+                  Software engineering roadmap and practical IT career guidance for developers.
                 </p>
                 <a
-                  href="https://www.youtube.com/watch?v=S5TYTFXka94"
+                  href="https://www.youtube.com/watch?v=zOjov-2OZ0E"
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-100"
                 >
-                  Open on YouTube
+                  Watch IT Video
                 </a>
               </div>
             </div>
             <div className="mt-3 flex items-center justify-between">
               <p className="text-xs text-slate-500">
-                Random demo gallery (Instagram style feel)
+                Random IT gallery (developer style feed)
               </p>
               <button
                 onClick={() => {
-                  const shuffled = [...socialGallery].sort(() => Math.random() - 0.5);
-                  setDemoPosts(
-                    shuffled.slice(0, 3).map((image, index) => ({
-                      id: `demo-${index}-${Date.now()}`,
-                      image,
-                      caption: [
-                        'Weekend vibes with clean aesthetics ✨',
-                        'Sunset moments and social feed energy 🌇',
-                        'Building beautiful UI experiences daily 🚀',
-                      ][index],
-                      likes: 120 + index * 35,
-                      liked: false,
-                      comments: [],
-                      inputComment: '',
-                    }))
-                  );
+                  setDemoPosts(buildDemoPosts(`${Date.now()}`));
                 }}
                 className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-100"
               >
@@ -246,12 +234,12 @@ export default function HomePage() {
                   >
                     <div className="flex items-center gap-3 border-b border-slate-100 px-4 py-3">
                       <img
-                        src={`https://api.dicebear.com/7.x/avataaars/png?seed=faizan-${index}`}
+                        src={`https://api.dicebear.com/7.x/avataaars/png?seed=dev-${index}`}
                         alt="Profile avatar"
                         className="h-9 w-9 rounded-full border border-slate-200 bg-slate-100"
                       />
                       <div>
-                        <p className="text-sm font-semibold text-slate-700">faizan_demo</p>
+                        <p className="text-sm font-semibold text-slate-700">dev_demo</p>
                         <p className="text-[11px] text-slate-500">Demo Post #{index + 1}</p>
                       </div>
                     </div>
@@ -277,7 +265,7 @@ export default function HomePage() {
                         </span>
                       </div>
                       <p className="text-sm text-slate-700">
-                        <span className="font-semibold">faizan_demo </span>
+                        <span className="font-semibold">dev_demo </span>
                         {post.caption}
                       </p>
                       <div className="flex items-center gap-2">
@@ -304,7 +292,7 @@ export default function HomePage() {
                         <div className="space-y-1">
                           {post.comments.slice(-2).map((comment, commentIndex) => (
                             <p key={`${post.id}-comment-${commentIndex}`} className="text-xs text-slate-600">
-                              <span className="font-semibold text-slate-700">faizan_demo:</span> {comment}
+                              <span className="font-semibold text-slate-700">dev_demo:</span> {comment}
                             </p>
                           ))}
                         </div>
